@@ -42,12 +42,14 @@ task control {
         File? fastq2
         String? minimap2_options
         String output_basename = basename(fastq) + ".control.paf"
+
+        Int cpu = 8
     }
 
     command <<<
         set -euxo pipefail
         apt-get -qq update && apt-get -qq install -y minimap2 2>&1
-        minimap2 ~{minimap2_options} -o '~{output_basename}' \
+        minimap2 ~{minimap2_options} -t ~{cpu} -o '~{output_basename}' \
             '~{db_fasta}' '~{fastq}' ~{"'" + fastq2 + "'"}
     >>>
 
@@ -57,6 +59,6 @@ task control {
 
     runtime {
         docker: "ubuntu:21.04"
-        cpu: 8
+        cpu: cpu
     }
 }

@@ -61,7 +61,8 @@ task index_shard {
 
     command <<<
         set -euxo pipefail
-        minimap2 ~{minimap2_options} -d '~{db_filename}' '~{shard_fasta}'
+        # set -I to NOT further split the shard
+        minimap2 ~{minimap2_options} -I 9999G -d '~{db_filename}' '~{shard_fasta}'
     >>>
 
     output {
